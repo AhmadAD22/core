@@ -1,0 +1,127 @@
+{% extends '../base_dashboard.html' %}
+{% block title %} المقالات {% endblock %}
+{% block blogs %}active{% endblock %}
+{% block users %}active{% endblock  %}
+{% block users_collapse %}show{% endblock %} 
+{% block breadcrumbt %}
+<li class="breadcrumb-item "><a class="text-light" href="{% url 'main_dashboard' %}">لوحة التحكم</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a class="text-primary" href="{% url 'blog:blog_list' %}">المقالات</a></li>
+{% endblock breadcrumbt %}
+
+{% block content %}
+
+<div class="container w-100 my-5 ">
+  <!-- Filter Section -->
+  <div class="my-3 d-flex justify-content-between align-content-center">
+    <div><h3 class="text-primary">المقالات</h3></div>
+    <div> 
+      <a class="btn btn-primary btn-lg" href="{% url 'blog:blog_add' %}"> 
+        إضافة مقال
+      </a> 
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="container-fluid table-container p-3">
+    <div class="d-flex justify-content-end my-2">
+      <div id="preloader" class="spinner-border text-primary" role="status" style="display: none;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div class="search-container">
+        <input 
+          type="text" 
+          class="search-input" 
+          placeholder="بحث" 
+          id="searchInput"
+        />
+      </div>
+    
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-hover txt-color align-middle">
+        <thead>
+          <tr>
+            <th scope="col">الرقم</th>
+            <th scope="col">العنوان</th>
+            <th scope="col">الصورة</th>
+            <th scope="col">الإجراء</th>
+          </tr>
+        </thead>
+        <tbody class="bg-transparent">
+          {% for blog in blogs %}
+          <tr class="txt-color">
+            <td>{{ blog.id }}</td>
+            <td>{{ blog.title }}</td>
+            <td>
+              {% if blog.image %}
+              <img src="{{ blog.image.url }}" alt="blog image" width="100" height="75">
+              {% endif %}
+              
+            </td>
+            <td class="action-buttons">
+              <!-- زر التعديل -->
+              <button onclick="window.location.href='{% url 'blog:blog_update' blog.id %}'" class="edit">✏️</button>
+              <!-- زر الحذف -->
+              <button type="button" rel="tooltip" class="delete" data-bs-toggle="modal" data-bs-target="#deleteblogModal{{blog.id}}">
+                🗑️
+              </button>
+
+              <!-- Delete Modal -->
+              <div class="modal fade" id="deleteblogModal{{blog.id}}" tabindex="-1" aria-labelledby="deleteblogModalLabel{{blog.id}}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content text-dark">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deleteblogModalLabel{{blog.id}}">
+                        حذف {{ blog.title }}
+                      </h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>هل أنت متأكد أنك تريد حذف</p>
+                      <p>"{{ blog.title }}"</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                      <a class="btn btn-danger" href="{% url 'blog:blog_delete' blog.id %}">حذف</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+  document.getElementById("searchInput").addEventListener("input", function () {
+    const preloader = document.getElementById("preloader");
+    const filter = this.value.toLowerCase();
+    const table = document.querySelector(".table tbody");
+    const rows = table.getElementsByTagName("tr");
+  
+    preloader.style.display = "block";
+  
+    setTimeout(() => {
+      Array.from(rows).forEach((row) => {
+        const cells = row.getElementsByTagName("td");
+        const rowText = Array.from(cells)
+          .map(cell => cell.textContent.toLowerCase())
+          .join(" ");
+  
+        if (rowText.includes(filter)) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+  
+      preloader.style.display = "none";
+    }, 500);
+  });
+</script>
+
+{% endblock %}

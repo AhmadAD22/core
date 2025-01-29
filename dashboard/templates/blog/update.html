@@ -1,0 +1,90 @@
+{% extends "../base_dashboard.html" %} 
+{% load static %}
+{% block title %} إضافة مقال {% endblock %}
+{% block blogs %}active{% endblock %}
+{% block users %}active{% endblock  %}
+{% block users_collapse %}show{% endblock %} 
+{% block breadcrumbt %}
+<li class="breadcrumb-item "><a class="text-light" href="{% url 'main_dashboard' %}">لوحة التحكم</a></li>
+<li class="breadcrumb-item" aria-current="page"><a class="text-light" href="{% url 'blog:blog_list' %}">المقالات</a></li>
+<li class="breadcrumb-item active" aria-current="page"><a class="text-primary" href="">إضافة</a></li>
+
+{% endblock breadcrumbt %}
+
+{% block content %}
+<div class="d-flex justify-content-center mt-5">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title text-center">إضافة مقال</h2>
+  
+      </div>
+      <div class="card-body">
+        <form method="POST" enctype="multipart/form-data" novalidate class="form">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          <!-- Image Upload -->
+  <div class="row text-center mb-4">
+    <div class="col-md-6">
+      <div class="form-group">
+        <label for="id_title">العنوان</label>
+        {{ form.title }}
+        <div class="text-danger">{{ form.title.errors }}</div>
+    </div>
+
+    <div class="form-group">
+      <label for="id_content">المحتوى</label>
+      {{ form.content }}
+      <div class="text-danger">{{ form.content.errors }}</div>
+  </div>
+
+      </div>
+   
+    <div class="col-md-6">
+      <label for="id_title">صورة المقال</label>
+        <div class="position-relative">
+            {% if form.image.value %}
+            <img src="{{ form.image.value.url }}" id="avatar" class="circular-avatar img-thumbnail">
+            {% else %}
+            <img src="{% static 'dashboard/images/upload.png' %}" id="avatar" class="circular-avatar img-thumbnail">
+            {% endif %}
+            <label for="id_avatar" class="btn btn-primary edit-avatar-btn mt-2"><i class="bi bi-pencil-fill"></i></label>
+        </div>
+        <input type="file" name="image" id="id_avatar" style="display:none;">
+    </div>
+    
+  </div>
+
+          <div class="row">
+              <!-- First Column -->
+
+                
+         
+          </div>
+
+          <div class="form-group mt-3 text-center">
+              <button type="submit" class="btn btn-primary">تعديل</button>
+              <a href="{% url 'blog:blog_list' %}" class="btn btn-secondary">إلغاء</a>
+          </div>
+      </form>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle avatar upload
+        document.getElementById('id_avatar').addEventListener('change', function() {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var image = document.querySelector('.circular-avatar');
+                    image.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+  </script>
+
+{% endblock content %}
+

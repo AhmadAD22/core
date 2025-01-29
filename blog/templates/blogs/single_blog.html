@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% block blog %}active{% endblock blog %}
+{% block title %}{{blog.title}}{% endblock title %}
+{% block content %}
+
+  <!-- ======= srart Breadcrumbs ======= -->
+  <section class="breadcrumbs py-4" data-aos="fade-up" data-aos-delay="100">
+    <div class="container">
+      <h2 class="title">{{blog.title}}</h2>
+      <p class="col-lg-10 col-12">
+        نسعى لتقديم أفضل المعلومات والتي يتم البحث عنها في المراجع العلمية الموثقة
+      </p>
+    </div>
+  </section>
+  <!-- End Breadcrumbs -->
+
+
+  <!-- ======= Blog Single Section ======= -->
+  <section id="blog" class="blog mt-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 entries" data-aos="fade-right" data-aos-delay="150">
+          <article class="entry entry-single">
+            <div class="entry-img">
+                {% if blog.image %}
+              <img src="{{blog.image.url}}" alt="post-image" class="img-fluid">
+              {% else %}
+              <img src="{% static 'dashboard/images/upload.png' %}" alt="post-image" class="img-fluid">
+              {% endif %}
+            </div>
+            <h2 class="entry-title">
+              <a href="">{{blog.title}}</a>
+            </h2>
+            <div class="entry-meta">
+              <ul>
+                <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-single.html"> {{blog.author.fullName}} </a></li>
+                <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-single.html"><time
+                      datetime="2024-01-01">{{blog.created_at}}</time></a></li>
+              </ul>
+            </div>
+            <div class="entry-content">
+            {{blog.content}}
+            </div>
+             {% comment %} <div class="entry-footer mt-3">
+
+              <i class="bi bi-folder"></i>
+              <ul class="cats">
+                <li><a href="#">Business</a></li>
+              </ul>
+              <i class="bi bi-tags"></i>
+              <ul class="tags">
+                <li><a href="#">Creative</a></li>
+                <li><a href="#">Tips</a></li>
+                <li><a href="#">Marketing</a></li>
+              </ul>
+            </div> {% endcomment %}
+          </article><!-- End blog entry -->
+
+ 
+         
+
+  </section><!-- End Blog Single Section -->
+
+{% endblock %}

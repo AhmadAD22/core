@@ -1,0 +1,171 @@
+{% extends '../base_dashboard.html' %}
+{% block title %}
+  تعديل طالب
+{% endblock %}
+{% block students %}
+  active
+{% endblock %}
+{% block users %}
+  active
+{% endblock %}
+{% block users_collapse %}
+  show
+{% endblock %}
+{% block breadcrumbt %}
+  <li class="breadcrumb-item">
+    <a class="text-light" href="{% url 'main_dashboard' %}">لوحة التحكم</a>
+  </li>
+  <li class="breadcrumb-item"><a class="text-light" href="{% url 'student:student_list' %}">الطلاب</a></li>
+  <li class="breadcrumb-item active" aria-current="page"><a class="text-primary" href="">تعديل</a></li>
+
+
+{% endblock %}
+
+{% block content %}
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalId" tabindex="-1" data-bs-backdrop="static" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form action="{% url 'student:student_change_password' id %}"  method="POST">
+          {% csrf_token %}
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitleId">تغير كلمة المرور</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="form-group position-relative">
+                <label for="password">كلمة المرور الجديدة</label>
+                <div class="input-group">
+                  <input type="password" name="password" class="form-control" id="password" />
+                  <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#password"><i class="bi bi-eye"></i></button>
+                </div>
+                <small id="passwordError" class="text-danger"></small>
+              </div>
+
+              <div class="form-group position-relative mt-3">
+                <label for="confirmPassword">تأكيد كلمة المرور</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="confirmPassword" />
+                  <button type="button" class="btn btn-outline-secondary toggle-password" data-target="#confirmPassword"><i class="bi bi-eye"></i></button>
+                </div>
+                <small id="confirmPasswordError" class="text-danger"></small>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>حفظ</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center mt-5">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title text-center">تعديل طالب</h2>
+      </div>
+      <div class="card-body">
+        <form method="POST" novalidate class="form">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+
+          <div class="form-group">
+            <label for="id_fullName">الإسم</label>
+            {{ form.fullName }}
+            <div class="text-danger">{{ form.fullName.errors }}</div>
+          </div>
+
+          <div class="form-group">
+            <label for="id_phone">الرقم</label>
+            {{ form.phone }}
+            <div class="text-danger">{{ form.phone.errors }}</div>
+          </div>
+
+          <div class="form-group">
+            <label for="id_email">البريد الإلكتروني</label>
+            {{ form.email }}
+            <div class="text-danger">{{ form.email.errors }}</div>
+          </div>
+          <div class="form-group">
+            <!-- Button trigger modal -->
+            <a type="button" class="text-primary" data-bs-toggle="modal" data-bs-target="#modalId">تغير كلمة المرور</a>
+          </div>
+
+          <script>
+            var modalId = document.getElementById('modalId')
+            
+            modalId.addEventListener('show.bs.modal', function (event) {
+              // Button that triggered the modal
+              let button = event.relatedTarget
+              // Extract info from data-bs-* attributes
+              let recipient = button.getAttribute('data-bs-whatever')
+            
+              // Use above variables to manipulate the DOM
+            })
+          </script>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">حفظ</button>
+            <a href="{% url 'student:student_list' %}" class="btn btn-secondary">إلغاء</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle Password Visibility
+    document.querySelectorAll('.toggle-password').forEach((button) => {
+      button.addEventListener('click', function () {
+        const target = document.querySelector(this.getAttribute('data-target'))
+        const icon = this.querySelector('i')
+        if (target.type === 'password') {
+          target.type = 'text'
+          icon.classList.remove('bi-eye')
+          icon.classList.add('bi-eye-slash')
+        } else {
+          target.type = 'password'
+          icon.classList.remove('bi-eye-slash')
+          icon.classList.add('bi-eye')
+        }
+      })
+    })
+    
+    // Validate Password and Confirm Password
+    const password = document.getElementById('password')
+    const confirmPassword = document.getElementById('confirmPassword')
+    const passwordError = document.getElementById('passwordError')
+    const confirmPasswordError = document.getElementById('confirmPasswordError')
+    const submitBtn = document.getElementById('submitBtn')
+    
+    function validatePasswords() {
+      const passwordValue = password.value.trim()
+      const confirmPasswordValue = confirmPassword.value.trim()
+    
+      if (passwordValue.length < 6) {
+        passwordError.textContent = 'يجب أن تكون كلمة المرور 6 أحرف على الأقل'
+        submitBtn.disabled = true
+      } else {
+        passwordError.textContent = ''
+      }
+    
+      if (confirmPasswordValue !== passwordValue) {
+        confirmPasswordError.textContent = 'كلمة المرور وتأكيد كلمة المرور غير متطابقتين'
+        submitBtn.disabled = true
+      } else {
+        confirmPasswordError.textContent = ''
+      }
+    
+      // Enable submit button only if both fields are valid
+      if (passwordValue.length >= 6 && confirmPasswordValue === passwordValue) {
+        submitBtn.disabled = false
+      }
+    }
+    
+    password.addEventListener('input', validatePasswords)
+    confirmPassword.addEventListener('input', validatePasswords)
+  </script>
+{% endblock %}

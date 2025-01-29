@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Home{% endblock title %}
+{% block home %}active{% endblock home %}
+{% block content %}
+
+
+
+
+
+
+
+  <!-- ============== Start Hero section ========== -->
+  <section class="hero  d-flex align-items-center justify-content-center" id="hero">
+    <div id="particles-js"></div>
+    <div class="container">
+      <div class="row flex-row align-items-center">
+        <div class="col-12 col-lg-5">
+          <div class="hero-text text-end">
+            <div class="row">
+              <div class="col-12 ">
+                <h1 class=" col-12 text-end" data-aos="fade-up" data-aos-delay="150">مؤسسة إلهام  الدولية </h1>
+              </div>
+              <div class="col-12 text-end">
+                <p class="text-end" data-aos="fade-up" data-aos-delay="200"> نقدم لك بيئة تدريبية متكاملة تجمع بين الخبرة العملية وأحدث المناهج العالمية في مجالات متنوعة مثل تدريب المدربين، صعوبات التعلم، اللغة الإنجليزية، والذكاء الاصطناعي. انطلق معنا نحو مستقبل مليء بالفرص والإمكانات التي تنتظرك لتكتشفها وتحقق أحلامك بثقة وتميز </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-6 mx-md-auto" data-aos="fade-right" data-aos-delay="100">
+          <div class="hero-image">
+            <div class="hero-img">
+              <img class="img-fluid " alt="hero-img"
+                src="{% static "website/images/hero/hero13.png" %}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ============== End Hero section ========== -->
+
+<!-- ============== Start clients section ========== -->
+ <section class="container blog pt-5">
+  <div class="heading">
+
+    <h1 class="title" data-aos="fade-up" data-aos-delay="100">
+       التدريبات
+    </h1>
+    <p class="" data-aos="fade-up" data-aos-delay="150">
+      إلهامك، طريقك نحو التميز
+    </p>
+  </div>
+ </section>
+
+<div class="clients py-lg-5 py-2" data-aos="fade-up" data-aos-delay="100">
+  <div class="container">
+    <div class="row">
+      <div class="owl-carousel client owl-theme">
+        <div class="item">
+          إدارة الموارد البشرية
+        </div>
+        <div class="item">
+         الصيدلية الزراعية الشاملة
+        </div>
+        <div class="item">
+          الجهوزية لسوق العمل
+        </div>
+        <div class="item">
+          صعوبات التعلم
+        </div>
+        <div class="item">
+           اللغة الإنجليزية 
+        </div>
+        <div class="item">
+           تدريب المدربين
+        </div>
+        <div class="item">
+           الذكاء الإصطناعي
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ============== End clients section ========== -->
+
+
+
+<!-- ============== Start Blog section ========== -->
+<section class="container blog py-5" id="blog">
+  <div class="heading">
+    
+    <h1 class="title" data-aos="fade-up" data-aos-delay="100">
+      أحدث المقالات
+    </h1>
+    <p class="" data-aos="fade-up" data-aos-delay="150">
+      معًا نحو غدٍ أفضل بالتدريب والمعرفة 
+       </p>
+  </div>
+  
+  <div class="row gy-4 gx-4 ">
+   
+
+    {% for blog in blogs %}
+    <div class=" col-lg-4 col-md-6 col-12 mx-auto" data-aos="fade-left" data-aos-delay="250">
+      <div class="box  card border-0">
+        <div class="col-12">
+          {% if blog.image %}
+          <img src="{{blog.image.url}}" alt="blog-img">
+          {% else %}
+          <img src="{% static 'dashboard/images/upload.png' %}" alt="blog-img">
+          {% endif %}
+
+        </div>
+        <div class="card-body">
+          <div class="info col-12 d-flex justify-content-between">
+            <h3><i class="bi bi-person-fill title-2 mx-2"></i>{{blog.author.fullName}}</h3>
+            <h3> <i class="bi bi-calendar-date-fill title-2 mx-2"></i>{{blog.created_at.date|date:"D-d/m/Y"}}</h3>
+            
+           
+          </div>
+          <h1 class="title-2">
+           {{blog.title}}
+          </h1>
+          <p dir="rtl">
+             
+            {{ blog.content|slice:":100" }}   
+            {% if blog.content|length > 100 %}......{% endif %}
+          </p>
+          <a href="{% url 'single_blog' blog.id %}" class="my-2 learn-more text-end">
+            <i class="bi bi-arrow-left"></i> المزيد
+        </a>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+  <div class="d-flex justify-content-center text-center mt-5">
+    <a href="{% url 'blogs_list' %}" class="my-2 btn text-center"><i class="bi bi-arrow-left"></i>المزيد من المقالات</a>
+  </div>
+</section>
+<!-- ============== End Blog section ========== -->
+
+
+{% endblock %}
