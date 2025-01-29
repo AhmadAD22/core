@@ -49,14 +49,15 @@
 
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link m-1 {% block managers %}
-
-                  {% endblock %}"
-                  href="{% url 'manager:manager_list' %}">
-                  <i class="bi bi-person"></i>
-                  الموظفون
-                </a>
+                {% if request.user.is_superuser %}
+                  <a class="nav-link m-1 {% block managers %}{% endblock %}"
+                    href="{% url 'manager:manager_list' %}">
+                    <i class="bi bi-person"></i>
+                    الموظفون
+                  </a>
+                {% endif %}
               </li>
+              
               <li class="nav-item">
                 <a class="nav-link m-1 {% block blogs %}
 
@@ -131,10 +132,10 @@
                 <ul class="dropdown-menu text-center">
                   {% if request.user.is_authenticated %}
                     <li>
-                      <a class="dropdown-item" href="">{% trans 'Account' %}</a>
+                      <a class="dropdown-item" href="">{{request.user.fullName}}</a>
                     </li>
                     <li>
-                      <a class="nav-link" href="">{% trans 'Logout' %}</a>
+                      <a class="nav-link" href="{% url 'logout' %}">{% trans 'Logout' %}</a>
                     </li>
                   {% endif %}
                 </ul>
