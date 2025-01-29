@@ -1,7 +1,7 @@
 from django.db import models
 from accounts.models import User
 from django.utils.text import slugify
-
+import os
 
 class BlogPost(models.Model):
 
@@ -20,5 +20,12 @@ class BlogPost(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def delete(self, *args, **kwargs):
+        if self.image:
+            image_path = self.image.path
+            if os.path.exists(image_path):
+                os.remove(image_path)
+        super().delete(*args, **kwargs)
     
     

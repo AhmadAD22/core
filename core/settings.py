@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-q!8kpst)$1f6(osi+smu_sb_xw0)25cb0yye1&--bb!bjj$h%p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,6 +41,11 @@ INSTALLED_APPS = [
     'blog',
     'accounts',
     'dashboard',
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost", 
+    "http://127.0.0.1",
+    "https://yourdomain.com",  # Add your actual domain here
 ]
 
 MIDDLEWARE = [

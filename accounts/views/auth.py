@@ -27,7 +27,7 @@ def login_view(request):
         
         if user is not None:
                 login(request,user)
-                return redirect("trainer_main")
+                return redirect("main_dashboard")
         else:
             error_message = 'Invalid phone number or password'
             return render(request, 'registration/login.html', {'error_message': error_message})
